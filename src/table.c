@@ -1,5 +1,7 @@
-#include <stdio.h>
+#include "table.h"
+
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
@@ -17,14 +19,7 @@ uint64_t fnv1a_hash(const void *data, size_t len)
     return hash;
 }
 
-typedef struct
-{
-    const char *key;
-    int value;
-    int used;
-} Entry;
-
-static Entry entry_create(const char *key, int value)
+Entry entry_create(const char *key, int value)
 {
     Entry e = {0};
     e.key = key;
@@ -33,15 +28,7 @@ static Entry entry_create(const char *key, int value)
     return e;
 }
 
-typedef struct
-{
-    Entry *entires;
-    size_t capacity;
-    size_t length;
-
-} Table;
-
-static Table table_create(size_t capacity)
+Table table_create(size_t capacity)
 {
     Table t = {0};
     t.capacity = capacity;
@@ -100,24 +87,4 @@ Entry *table_get(Table *t, const char *key)
 
         index = (index + 1) & (t->capacity - 1);
     }
-}
-
-int main(void)
-{
-    Table t = table_create(16);
-
-    const char *key = "Hello";
-
-    const int value = 10;
-
-    table_insert(&t, key, value);
-
-    const char *needle = "Hello";
-    Entry *e = table_get(&t, needle);
-    if (e)
-    {
-        printf("%d\n", e->value);
-    }
-
-    return 0;
 }
