@@ -5,12 +5,17 @@ typedef unsigned long size_t;
 
 typedef struct
 {
-    const char *key;
-    int value;
+    void *key;
+    size_t key_size;
+
+    void *value;
+    size_t value_size;
+
     int used;
+    size_t probe_len;
 } Entry;
 
-Entry entry_create(const char *key, int value);
+Entry entry_create(const void *key, size_t key_size, const void *value, size_t value_size);
 
 typedef struct
 {
@@ -21,7 +26,7 @@ typedef struct
 } Table;
 
 Table table_create(size_t capacity);
-void table_insert(Table *t, const char *key, const int value);
-Entry *table_get(Table *t, const char *key);
+void table_insert(Table *t, const void *key, size_t key_size, const void *value, size_t value_size);
+Entry *table_get(Table *t, const char *key, size_t key_size);
 
 #endif // __TABLE_H

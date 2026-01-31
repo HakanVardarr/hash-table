@@ -7,17 +7,17 @@
 
 int main(void)
 {
-    Table t = table_create(16);
+    Table t = table_create(1024);
 
     const char *key = "Hello";
-    const int value = 10;
-    table_insert(&t, key, value);
+    int value = 10;
+    table_insert(&t, key, strlen(key), &value, sizeof(int));
 
     const char *needle = "Hello";
-    Entry *e = table_get(&t, needle);
+    Entry *e = table_get(&t, needle, strlen(needle));
     if (e)
     {
-        printf("%d\n", e->value);
+        printf("%d\n", *(int *)e->value);
     }
 
     return 0;
